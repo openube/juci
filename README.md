@@ -18,20 +18,56 @@ You can now try JUCI on openwrt.
 
 Here is how to install it:
 
-- Add juci feed to your feeds.conf.default
-src-git juci https://github.com/mkschreder/juci-openwrt-feed.git
+- Add my feed to your feeds.conf.default
+src-git juci https://github.com/mkschreder/mks-openwrt-feed.git
 
 - Update and install the feed
 ./scripts/feeds update juci
-./scripts/feeds install -p juci -a
+./scripts/feeds install -f -p juci -a
 
-- select juci core, inteno theme and plugins under JUCI menu in menuconfig
+- select juci core, inteno theme and plugins under JUCI menu in menuconfig (NOTE: some plugins conflict with eachother so you can not select juci-broadcom-wl and juci-openwrt-wireless at the same time). 
+
+For example, you could append this to your .config and then do make defconfig: 
+
+	CONFIG_PACKAGE_juci-ubus-core=y
+	CONFIG_PACKAGE_juci-ddns=y
+	CONFIG_PACKAGE_juci-diagnostics=y
+	CONFIG_PACKAGE_juci-dnsmasq-dhcp=y
+	CONFIG_PACKAGE_juci-dropbear=y
+	CONFIG_PACKAGE_juci-ethernet=y
+	CONFIG_PACKAGE_juci-event=y
+	CONFIG_PACKAGE_juci-firewall-fw3=y
+	CONFIG_PACKAGE_juci-freecwmp=y
+	CONFIG_PACKAGE_juci-jquery-console=y
+	CONFIG_PACKAGE_juci-minidlna=y
+	CONFIG_PACKAGE_juci-mod-status=y
+	CONFIG_PACKAGE_juci-mod-system=y
+	CONFIG_PACKAGE_juci-network-netifd=y
+	CONFIG_PACKAGE_juci-openwrt-wireless=y
+	CONFIG_PACKAGE_juci-samba=y
+	CONFIG_PACKAGE_juci-simple-gui=y
+	CONFIG_PACKAGE_juci-snmpd=y
+	CONFIG_PACKAGE_juci-sysupgrade=y
+	CONFIG_PACKAGE_juci-uhttpd=y
+	CONFIG_PACKAGE_juci-upnp=y
+	CONFIG_PACKAGE_juci-usb=y
+	CONFIG_PACKAGE_juci-theme-smartrg=y
+	CONFIG_PACKAGE_juci=y
 
 - BUILD! 
+
+Lastly, at first you will not see any menus because menus are set in /etc/config/juci. As a start you can use juci.config.example and copy it to your router /etc/config/juci. Then you can modify it to get the menus you want. A better menu system is on the todo list.. 
 
 And it should work. If you then go to your router ip you should see the login screen. By default admin user is used to login but if you don't have password set for admin user you will not be able to login. So then go to the console and set password for admin user or change the user used for logging in by editing /etc/config/rpcd and then do /etc/init.d/rpcd restart. 
 
 JUCI also includes a nodejs server which you can do for local testing and for forwarding jsonrpc calls to your router during testing (server.js). 
+
+Contribution
+------------
+
+If you want to work on juci or if you are using juci yourself and make modifications to it, it is usually a good idea if you submit your modifications as patches. This can be done by using "git format-patch --stdout" and then submitting the patch to me. 
+
+(Note: if you make many modifications and never submit your modifications for review then chances are that your codebase is slowly becoming a "pile of crap". When this happens, eventually you will have to start with a fresh clone of juci repo and readd your things because they have not been properly integrated in the first place. So it is actually quite benefitial to submit patches when you are doing continuous development). 
 
 What is JUCI? 
 -------------
